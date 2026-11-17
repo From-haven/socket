@@ -34,7 +34,8 @@ class UDPDiscovery:
     def start(self):
         self.running = True
         threading.Thread(target=self._broadcast_loop, daemon=True).start()
-        threading.Thread(target=self._listen_loop, daemon=True).start()
+        threading.Thread(target=self._listen_loop, daemon=True).start() 
+        # 2 cái thg này giúp tạo 2 luồng để gửi và nhận gói tin UDP cùng 1 lúc
 
     def _broadcast_loop(self):
         while self.running:
