@@ -24,7 +24,7 @@ class TCPTestCLI:
                     break
                 elif line == "/list":
                     peers = self.registry.list_peers()
-                    if not peers:
+                    if not peers: 
                         print("(No online peers)")
                     for i, (name, info) in enumerate(peers, 1):
                         print(f"  {i}. {name} ({info['ip']}:{info['tcp_port']}) {info['status']}")
