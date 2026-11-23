@@ -26,7 +26,7 @@ subsocket/
 │   └── udp_manager.py      # Quản lý UDP Discovery, Broadcast định kỳ & Timeout
 ├── test/
 │   ├── helpers.py
-│   ├── test.py             # Nơi chạy toàn bộ test
+│   ├── main_test.py             # Nơi chạy toàn bộ test
 │   ├── test_error_handing.py
 │   ├── test_file_transfer.py
 │   ├── test_protocol.py
