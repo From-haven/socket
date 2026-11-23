@@ -24,6 +24,14 @@ subsocket/
 ├── udp/
 │   ├── __init__.py
 │   └── udp_manager.py      # Quản lý UDP Discovery, Broadcast định kỳ & Timeout
+├── test/
+│   ├── helpers.py
+│   ├── test.py             # Nơi chạy toàn bộ test
+│   ├── test_error_handing.py
+│   ├── test_file_transfer.py
+│   ├── test_protocol.py
+│   ├── test_tcp_chat.py
+│   └── test_udp.py         
 ├── tcp/
 │   ├── __init__.py
 │   ├── tcp_protocol.py     # Đóng gói và bóc tách khung dữ liệu TCP (Framing an toàn)
@@ -94,6 +102,83 @@ python lanchat.py --name Minh --tcp-port 5000 --bcast 192.168.1.255
 ```bash
 python lanchat.py --name Quan --tcp-port 5000 --bcast 192.168.1.255
 ```
+### 4.3. Test bằng unittest
+
+Bộ kiểm thử tự động nằm trong thư mục `test/` và được gom trong `test/main_test.py`. Tất cả test sử dụng thư viện chuẩn `unittest` của Python, vì vậy không cần cài thêm framework test.
+
+Các test mô phỏng trực tiếp UDP/TCP trên localhost:
+
+| Nhóm | File test | Số test | Kiểm tra |
+| :--- | :--- | ---: | :--- |
+| `protocol` | `test_protocol.py` | 19 | Đóng gói và bóc tách frame MSG, IDENT, FILE, BYE; đọc đúng độ dài UTF-8; chống dính/rách gói; giới hạn header |
+| `udp` | `test_udp.py` | 11 | Định dạng/broadcast HELLO, chu kỳ 3 giây, nhận peer, trạng thái away/online, timeout 10 giây và tra cứu theo tên/STT |
+| `tcp` | `test_tcp_chat.py` | 9 | Kết nối và IDENT, chat hai chiều, Unicode/Emoji, unread counter, chuyển phòng chat, /leave và ngắt kết nối |
+| `file` | `test_file_transfer.py` | 7 | Gửi file text/binary, SHA256, tiến độ %, đổi tên file trùng, `.part`, chống traversal và chat khi truyền file |
+| `error` | `test_error_handling.py` | 8 | User/offline không tồn tại, connection refused, thiếu chat, file không tồn tại, header rác/header quá dài |
+
+**Điều kiện trước khi chạy:** Mở terminal tại thư mục gốc của dự án (`subsocket/`) và đảm bảo Python đã cài đặt.
+
+#### Chạy toàn bộ test
+
+```bash
+python test/main_test.py
+```
+
+Trong PowerShell trên Windows, nếu terminal không hiển thị đúng tiếng Việt, đặt mã hóa UTF-8 trước:
+
+```powershell
+$env:PYTHONIOENCODING="utf-8"
+python test/main_test.py
+```
+
+Trong Command Prompt:
+
+```bat
+set PYTHONIOENCODING=utf-8
+python test/main_test.py
+```
+
+Mã thoát của runner là `0` khi tất cả test đạt và `1` khi có test fail hoặc error.
+
+#### Chạy test theo từng nhóm
+
+```bash
+# Chạy test giao thức TCP
+python test/main_test.py -s protocol
+
+# Chạy test UDP
+python test/main_test.py -s udp
+
+# Chạy test chat TCP
+python test/main_test.py -s tcp
+
+# Chạy test truyền file
+python test/main_test.py -s file
+
+# Chạy test xử lý lỗi
+python test/main_test.py -s error
+
+# Chạy nhiều nhóm
+python test/main_test.py -s udp tcp file
+
+# Chạy tất cả các nhóm (mặc định)
+python test/main_test.py -s all
+```
+
+Liệt kê các nhóm test mà không chạy test:
+
+```bash
+python test/main_test.py -l
+```
+
+In chi tiết từng test case thay vì ký hiệu `.`/`F`/`E`:
+
+```bash
+python test/main_test.py -v
+python test/main_test.py -v -s udp tcp
+```
+
+**Kết quả mong đợi:** Tổng cộng có **54 test**. Khi môi trường mạng/socket hoạt động bình thường, kết quả cuối cùng là `54 passed`, không có `failed` hoặc `skipped`.
 
 ---
 

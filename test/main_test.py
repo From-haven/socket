@@ -6,11 +6,11 @@ Gom các module test theo từng nhóm yêu cầu trong bảng điểm và in k�
 theo từng nhóm, kèm bảng tổng kết ở cuối.
 
 Cách chạy (từ thư mục gốc của project):
-    python test/main.py                 # chạy tất cả
-    python test/main.py -v              # in từng test case
-    python test/main.py -s udp          # chỉ chạy nhóm UDP
-    python test/main.py -s tcp file     # chạy nhiều nhóm
-    python test/main.py -l              # liệt kê các nhóm
+    python test/main_test.py                 # chạy tất cả
+    python test/main_test.py -v              # in từng test case
+    python test/main_test.py -s udp          # chỉ chạy nhóm UDP
+    python test/main_test.py -s tcp file     # chạy nhiều nhóm
+    python test/main_test.py -l              # liệt kê các nhóm
 
 Mã thoát: 0 nếu tất cả test đạt, 1 nếu có test fail/error.
 """
